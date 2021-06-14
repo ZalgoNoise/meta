@@ -8,7 +8,7 @@ import (
 	"math"
 	"strconv"
 
-	cm "meta/strings/charmatcher"
+	cm "github.com/ZalgoNoise/meta/strings/charmatcher"
 )
 
 const (

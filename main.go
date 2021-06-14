@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	cm "meta/strings/charmatcher"
+	cm "github.com/ZalgoNoise/meta/strings/charmatcher"
 )
 
 func main() {

@@ -5,6 +5,7 @@ go_library(
     srcs = ["strbuilder.go"],
     importpath = "github.com/ZalgoNoise/meta/strings/strbuilder",
     visibility = ["//visibility:public"],
+    deps = ["//strings/charmatcher"],
 )
 
 go_test(

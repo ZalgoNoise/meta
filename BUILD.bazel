@@ -5,6 +5,7 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/ZalgoNoise/meta",
     visibility = ["//visibility:private"],
+    deps = ["//strings/charmatcher"],
 )
 
 go_binary(
