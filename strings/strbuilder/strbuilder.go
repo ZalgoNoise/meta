@@ -12,7 +12,6 @@ import (
 )
 
 const (
-	serialVersionUID int64 = 4383685877147921099
 	defaultCapacity  int   = 16
 )
 
