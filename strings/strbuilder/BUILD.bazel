@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "strbuilder",
+    srcs = ["strbuilder.go"],
+    importpath = "github.com/ZalgoNoise/meta/strings/strbuilder",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "strbuilder_test",
+    srcs = ["strbuilder_test.go"],
+    embed = [":strbuilder"],
+)

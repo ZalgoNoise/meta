@@ -8,7 +8,7 @@ import (
 	"math"
 	"strconv"
 
-	cm "base/strings/charmatcher"
+	cm "meta/strings/charmatcher"
 )
 
 const (

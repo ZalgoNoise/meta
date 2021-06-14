@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "charmatcher",
+    srcs = ["charmatcher.go"],
+    importpath = "github.com/ZalgoNoise/meta/strings/charmatcher",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "charmatcher_test",
+    srcs = ["charmatcher_test.go"],
+    embed = [":charmatcher"],
+)

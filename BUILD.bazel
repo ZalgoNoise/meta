@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "meta_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/ZalgoNoise/meta",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "meta",
+    embed = [":meta_lib"],
+    visibility = ["//visibility:public"],
+)

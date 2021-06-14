@@ -248,7 +248,7 @@ func TestAppendErr(t *testing.T) {
 	for _, test := range tests {
 		for _, x := range test.input {
 			if err := test.base.Append(x); err != nil && test.ok != false {
-				t.Errorf(`%q(%q) = %v`, funcName, x, err)
+				t.Errorf(`%q(%v) = %v`, funcName, x, err)
 			}
 		}
 		for idx, v := range test.base.Output {

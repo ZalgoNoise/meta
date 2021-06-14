@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	cm "base/strings/charmatcher"
+	cm "meta/strings/charmatcher"
 )
 
 func main() {
