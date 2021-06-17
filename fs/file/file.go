@@ -166,7 +166,8 @@ func getFields(b []byte) [][]byte {
 	for i := 0 ; i < len(b) ; i++ {
 		
 		// " " == 32
-		if b[i] == 32 {
+		// "\t" == 9
+		if b[i] == 32 || b[i] == 9 {
 
 			if len(buf) == 0 {
 				continue

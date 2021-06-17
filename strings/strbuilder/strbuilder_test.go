@@ -610,8 +610,118 @@ func TestPadStart(t *testing.T) {
 
 }
 
-func TestToString(t *testing.T) {
-	var funcName string = `TestToString`
+func TestFields(t *testing.T) {
+	var funcName string = `TestFields`
+	tests := []struct {
+		input *StringBuilder
+		expected [][]byte
+		count int
+	}{
+		{
+			input: NewStringBuilder(`AAA BBB CCC`),
+			expected: [][]byte{
+				[]byte(`AAA`),
+				[]byte(`BBB`),
+				[]byte(`CCC`),
+			},
+			count: 3,
+		},{
+			input: NewStringBuilder("AAA\tBBB\tCCC"),
+			expected: [][]byte{
+				[]byte(`AAA`),
+				[]byte(`BBB`),
+				[]byte(`CCC`),
+			},
+			count: 3,
+		},{
+			input: NewStringBuilder("A A A\tBBB\tCCC"),
+			expected: [][]byte{
+				[]byte(`A`),
+				[]byte(`A`),
+				[]byte(`A`),
+				[]byte(`BBB`),
+				[]byte(`CCC`),
+			},
+			count: 5,
+		},
+	}
+
+	for _, test := range tests {
+		n, fields := test.input.Fields()
+
+		if n != test.count {
+			t.Errorf(`%q(%q) = %v fields, expected %v`, funcName, test.input.String(), n, test.count)
+		}
+
+		for a := 0 ; a < len(fields); a++ {
+			for b := 0 ; b < len(fields[a]) ; b++ {
+				if fields[a][b] != test.expected[a][b] {
+					t.Errorf(`%q(%q) = %q, expected %q`, funcName,  test.input.String(), fields[a], test.expected[a])
+				}
+			}
+		}
+	}
+
+}
+
+
+func TestFieldsBy(t *testing.T) {
+	var funcName string = `TestFieldsBy`
+	tests := []struct {
+		input     *StringBuilder
+		separator string
+		expected  [][]byte
+		count     int
+	}{
+		{
+			input:     NewStringBuilder(`AAAxBBBxCCC`),
+			separator: "x",
+			expected: [][]byte{
+				[]byte(`AAA`),
+				[]byte(`BBB`),
+				[]byte(`CCC`),
+			},
+			count: 3,
+		}, {
+			input:     NewStringBuilder("AAAxBBBxCCC"),
+			separator: "xyz",
+			expected:  [][]byte{},
+			count:     -1,
+		}, {
+			input:     NewStringBuilder("AxAxAxBBBxCCC"),
+			separator: "x",
+			expected: [][]byte{
+				[]byte(`A`),
+				[]byte(`A`),
+				[]byte(`A`),
+				[]byte(`BBB`),
+				[]byte(`CCC`),
+			},
+			count: 5,
+		},
+	}
+
+	for _, test := range tests {
+		n, fields := test.input.FieldsBy(test.separator)
+
+		if n != test.count {
+			t.Errorf(`%q(%q) = %v fields, expected %v`, funcName, test.input.String(), n, test.count)
+		}
+
+		for a := 0; a < len(fields); a++ {
+			for b := 0; b < len(fields[a]); b++ {
+				if fields[a][b] != test.expected[a][b] {
+					t.Errorf(`%q(%q) = %q, expected %q`, funcName, test.input.String(), fields[a], test.expected[a])
+				}
+			}
+		}
+	}
+}
+
+
+
+func TestString(t *testing.T) {
+	var funcName string = `TestString`
 	tests := []struct {
 		input    *StringBuilder
 		expected []rune
@@ -639,7 +749,7 @@ func TestToString(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		out := []rune(test.input.ToString())
+		out := []rune(test.input.String())
 
 		for idx, v := range out {
 			if v != test.expected[idx] {
