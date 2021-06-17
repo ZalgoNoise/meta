@@ -291,13 +291,12 @@ func (b *StringBuilder) PadStart(length int, pad interface{}) error {
 // by its whitespace, returning the number of fields detected and a slice
 // of byte arrays (for each field and its content)
 func (b *StringBuilder) Fields() (n int, fields [][]byte) {
-	
+
 	var buf []byte
 	counter := 0
 
+	for i := 0; i < len(b.Output); i++ {
 
-	for i := 0 ; i < len(b.Output) ; i++ {
-		
 		// " " == 32
 		// "\t" == 9
 		if b.Output[i] == 32 || b.Output[i] == 9 {
@@ -315,31 +314,23 @@ func (b *StringBuilder) Fields() (n int, fields [][]byte) {
 	if len(buf) > 0 {
 		fields = append(fields, buf)
 	}
-	
+
 	return len(fields), fields
 }
 
-
 // FieldsBy method will breakdown the content in the StringBuilder object
-// by the input character provided, returning the number of fields detected 
+// by the input rune provided, returning the number of fields detected
 // and a slice of byte arrays (for each field and its content)
-func (b *StringBuilder) FieldsBy(sep string) (n int, fields [][]byte) {
-	
+func (b *StringBuilder) FieldsBy(sep rune) (n int, fields [][]byte) {
+
 	var buf []byte
 	counter := 0
 
-	separator := []rune(sep)
-	// one character only
-	if len(separator) > 1 {
-		return -1, [][]byte{}
-	}
+	for i := 0; i < len(b.Output); i++ {
 
-
-	for i := 0 ; i < len(b.Output) ; i++ {
-		
 		// " " == 32
 		// "\t" == 9
-		if b.Output[i] == separator[0] {
+		if b.Output[i] == sep {
 
 			if len(buf) == 0 {
 				continue
@@ -354,8 +345,51 @@ func (b *StringBuilder) FieldsBy(sep string) (n int, fields [][]byte) {
 	if len(buf) > 0 {
 		fields = append(fields, buf)
 	}
-	
+
 	return len(fields), fields
+}
+
+// FieldsRows method will breakdown the content in the StringBuilder object
+// by the input runes provided, returning the number of rows and fields detected
+// and a slice of slice of byte arrays (for each row, and each field and its content)
+func (b *StringBuilder) FieldsRows(row, fld rune) (r, f int, rows [][][]byte) {
+
+	var buf []byte
+	var fields [][]byte
+
+	for i := 0; i < len(b.Output); i++ {
+		if b.Output[i] == row {
+			if len(fields) == 0 {
+				continue
+			}
+			rows = append(rows, fields)
+			fields = [][]byte{}
+			continue
+		}
+		// " " == 32
+		// "\t" == 9
+		// "\n" == 10
+		if b.Output[i] == fld {
+
+			if len(buf) == 0 {
+				continue
+			}
+			fields = append(fields, buf)
+			buf = []byte{}
+			continue
+		}
+		buf = append(buf, byte(b.Output[i]))
+	}
+
+	if len(buf) > 0 {
+		fields = append(fields, buf)
+	}
+
+	if len(fields) > 0 {
+		rows = append(rows, fields)
+	}
+
+	return len(rows), len(fields), rows
 }
 
 

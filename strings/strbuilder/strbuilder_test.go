@@ -613,9 +613,9 @@ func TestPadStart(t *testing.T) {
 func TestFields(t *testing.T) {
 	var funcName string = `TestFields`
 	tests := []struct {
-		input *StringBuilder
+		input    *StringBuilder
 		expected [][]byte
-		count int
+		count    int
 	}{
 		{
 			input: NewStringBuilder(`AAA BBB CCC`),
@@ -625,7 +625,7 @@ func TestFields(t *testing.T) {
 				[]byte(`CCC`),
 			},
 			count: 3,
-		},{
+		}, {
 			input: NewStringBuilder("AAA\tBBB\tCCC"),
 			expected: [][]byte{
 				[]byte(`AAA`),
@@ -633,7 +633,7 @@ func TestFields(t *testing.T) {
 				[]byte(`CCC`),
 			},
 			count: 3,
-		},{
+		}, {
 			input: NewStringBuilder("A A A\tBBB\tCCC"),
 			expected: [][]byte{
 				[]byte(`A`),
@@ -653,29 +653,27 @@ func TestFields(t *testing.T) {
 			t.Errorf(`%q(%q) = %v fields, expected %v`, funcName, test.input.String(), n, test.count)
 		}
 
-		for a := 0 ; a < len(fields); a++ {
-			for b := 0 ; b < len(fields[a]) ; b++ {
+		for a := 0; a < len(fields); a++ {
+			for b := 0; b < len(fields[a]); b++ {
 				if fields[a][b] != test.expected[a][b] {
-					t.Errorf(`%q(%q) = %q, expected %q`, funcName,  test.input.String(), fields[a], test.expected[a])
+					t.Errorf(`%q(%q) = %q, expected %q`, funcName, test.input.String(), fields[a], test.expected[a])
 				}
 			}
 		}
 	}
-
 }
-
 
 func TestFieldsBy(t *testing.T) {
 	var funcName string = `TestFieldsBy`
 	tests := []struct {
 		input     *StringBuilder
-		separator string
+		separator rune
 		expected  [][]byte
 		count     int
 	}{
 		{
 			input:     NewStringBuilder(`AAAxBBBxCCC`),
-			separator: "x",
+			separator: 'x',
 			expected: [][]byte{
 				[]byte(`AAA`),
 				[]byte(`BBB`),
@@ -683,13 +681,8 @@ func TestFieldsBy(t *testing.T) {
 			},
 			count: 3,
 		}, {
-			input:     NewStringBuilder("AAAxBBBxCCC"),
-			separator: "xyz",
-			expected:  [][]byte{},
-			count:     -1,
-		}, {
 			input:     NewStringBuilder("AxAxAxBBBxCCC"),
-			separator: "x",
+			separator: 'x',
 			expected: [][]byte{
 				[]byte(`A`),
 				[]byte(`A`),
@@ -718,6 +711,61 @@ func TestFieldsBy(t *testing.T) {
 	}
 }
 
+func TestFieldsRows(t *testing.T) {
+	var funcName string = `TestFieldsRows`
+	tests := []struct {
+		input    *StringBuilder
+		sep1     rune
+		sep2     rune
+		expected [][][]byte
+		len1     int
+		len2     int
+	}{
+		{
+			input: NewStringBuilder(`+AxAx+BxBx+CxCx`),
+			sep1:  '+',
+			sep2:  'x',
+			expected: [][][]byte{
+				[][]byte{
+					[]byte(`A`),
+					[]byte(`A`),
+				},
+				[][]byte{
+					[]byte(`B`),
+					[]byte(`B`),
+				},
+				[][]byte{
+					[]byte(`C`),
+					[]byte(`C`),
+				},
+			},
+			len1: 3,
+			len2: 2,
+		},
+	}
+
+	for _, test := range tests {
+		r, f, rows := test.input.FieldsRows(test.sep1, test.sep2)
+
+		if r != test.len1 {
+			t.Errorf("%q(%q) = %v rows, expected %v", funcName, test.input.String(), r, test.len1)
+		}
+
+		if f != test.len2 {
+			t.Errorf("%q(%q) = %v fields, expected %v", funcName, test.input.String(), r, test.len2)
+		}
+
+		for a := 0; a < len(rows); a++ {
+			for b := 0; b < len(rows[a]); b++ {
+				for c := 0; c < len(rows[a][b]); c++ {
+					if rows[a][b][c] != test.expected[a][b][c] {
+						t.Errorf("%q(%q) = %q, expected %q", funcName, test.input.String(), rows[a][b], test.expected[a][b])
+					}
+				}
+			}
+		}
+	}
+}
 
 
 func TestString(t *testing.T) {
