@@ -614,33 +614,33 @@ func TestFields(t *testing.T) {
 	var funcName string = `TestFields`
 	tests := []struct {
 		input    *StringBuilder
-		expected [][]byte
+		expected [][]rune
 		count    int
 	}{
 		{
 			input: NewStringBuilder(`AAA BBB CCC`),
-			expected: [][]byte{
-				[]byte(`AAA`),
-				[]byte(`BBB`),
-				[]byte(`CCC`),
+			expected: [][]rune{
+				[]rune(`AAA`),
+				[]rune(`BBB`),
+				[]rune(`CCC`),
 			},
 			count: 3,
 		}, {
 			input: NewStringBuilder("AAA\tBBB\tCCC"),
-			expected: [][]byte{
-				[]byte(`AAA`),
-				[]byte(`BBB`),
-				[]byte(`CCC`),
+			expected: [][]rune{
+				[]rune(`AAA`),
+				[]rune(`BBB`),
+				[]rune(`CCC`),
 			},
 			count: 3,
 		}, {
 			input: NewStringBuilder("A A A\tBBB\tCCC"),
-			expected: [][]byte{
-				[]byte(`A`),
-				[]byte(`A`),
-				[]byte(`A`),
-				[]byte(`BBB`),
-				[]byte(`CCC`),
+			expected: [][]rune{
+				[]rune(`A`),
+				[]rune(`A`),
+				[]rune(`A`),
+				[]rune(`BBB`),
+				[]rune(`CCC`),
 			},
 			count: 5,
 		},
@@ -668,27 +668,27 @@ func TestFieldsBy(t *testing.T) {
 	tests := []struct {
 		input     *StringBuilder
 		separator rune
-		expected  [][]byte
+		expected  [][]rune
 		count     int
 	}{
 		{
 			input:     NewStringBuilder(`AAAxBBBxCCC`),
 			separator: 'x',
-			expected: [][]byte{
-				[]byte(`AAA`),
-				[]byte(`BBB`),
-				[]byte(`CCC`),
+			expected: [][]rune{
+				[]rune(`AAA`),
+				[]rune(`BBB`),
+				[]rune(`CCC`),
 			},
 			count: 3,
 		}, {
 			input:     NewStringBuilder("AxAxAxBBBxCCC"),
 			separator: 'x',
-			expected: [][]byte{
-				[]byte(`A`),
-				[]byte(`A`),
-				[]byte(`A`),
-				[]byte(`BBB`),
-				[]byte(`CCC`),
+			expected: [][]rune{
+				[]rune(`A`),
+				[]rune(`A`),
+				[]rune(`A`),
+				[]rune(`BBB`),
+				[]rune(`CCC`),
 			},
 			count: 5,
 		},
@@ -717,7 +717,7 @@ func TestFieldsRows(t *testing.T) {
 		input    *StringBuilder
 		sep1     rune
 		sep2     rune
-		expected [][][]byte
+		expected [][][]rune
 		len1     int
 		len2     int
 	}{
@@ -725,21 +725,45 @@ func TestFieldsRows(t *testing.T) {
 			input: NewStringBuilder(`+AxAx+BxBx+CxCx`),
 			sep1:  '+',
 			sep2:  'x',
-			expected: [][][]byte{
-				[][]byte{
-					[]byte(`A`),
-					[]byte(`A`),
+			expected: [][][]rune{
+				[][]rune{
+					[]rune(`A`),
+					[]rune(`A`),
 				},
-				[][]byte{
-					[]byte(`B`),
-					[]byte(`B`),
+				[][]rune{
+					[]rune(`B`),
+					[]rune(`B`),
 				},
-				[][]byte{
-					[]byte(`C`),
-					[]byte(`C`),
+				[][]rune{
+					[]rune(`C`),
+					[]rune(`C`),
 				},
 			},
 			len1: 3,
+			len2: 2,
+		}, {
+			input: NewStringBuilder(`+AAAxAAx+BBxBBBx+CxCCCx+DDDDDxDDx`),
+			sep1:  '+',
+			sep2:  'x',
+			expected: [][][]rune{
+				[][]rune{
+					[]rune(`AAA`),
+					[]rune(`AA`),
+				},
+				[][]rune{
+					[]rune(`BB`),
+					[]rune(`BBB`),
+				},
+				[][]rune{
+					[]rune(`C`),
+					[]rune(`CCC`),
+				},
+				[][]rune{
+					[]rune(`DDDDD`),
+					[]rune(`DD`),
+				},
+			},
+			len1: 4,
 			len2: 2,
 		},
 	}
@@ -766,7 +790,6 @@ func TestFieldsRows(t *testing.T) {
 		}
 	}
 }
-
 
 func TestString(t *testing.T) {
 	var funcName string = `TestString`

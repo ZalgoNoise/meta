@@ -11,8 +11,15 @@ import (
 	cm "github.com/ZalgoNoise/meta/strings/charmatcher"
 )
 
+
 const (
 	defaultCapacity  int   = 16
+)
+
+var (
+	defaultSepException []rune = []rune{
+		58131, // 
+	}
 )
 
 // StringBuilder struct represents an object to build strings,
@@ -289,27 +296,30 @@ func (b *StringBuilder) PadStart(length int, pad interface{}) error {
 
 // Fields method will breakdown the content in the StringBuilder object
 // by its whitespace, returning the number of fields detected and a slice
-// of byte arrays (for each field and its content)
-func (b *StringBuilder) Fields() (n int, fields [][]byte) {
+// of rune arrays (for each field and its content)
+func (b *StringBuilder) Fields() (n int, fields [][]rune) {
 
-	var buf []byte
-	counter := 0
+	var buf []rune
+	//var ignore []rune = []rune{}
 
 	for i := 0; i < len(b.Output); i++ {
 
 		// " " == 32
 		// "\t" == 9
+		// "\n" == 10
 		if b.Output[i] == 32 || b.Output[i] == 9 {
+			if checkSepException(b.Output[i]) {
+				continue
+			}
 
 			if len(buf) == 0 {
 				continue
 			}
 			fields = append(fields, buf)
-			buf = []byte{}
-			counter++
+			buf = []rune{}
 			continue
 		}
-		buf = append(buf, byte(b.Output[i]))
+		buf = append(buf, b.Output[i])
 	}
 	if len(buf) > 0 {
 		fields = append(fields, buf)
@@ -320,27 +330,31 @@ func (b *StringBuilder) Fields() (n int, fields [][]byte) {
 
 // FieldsBy method will breakdown the content in the StringBuilder object
 // by the input rune provided, returning the number of fields detected
-// and a slice of byte arrays (for each field and its content)
-func (b *StringBuilder) FieldsBy(sep rune) (n int, fields [][]byte) {
+// and a slice of rune arrays (for each field and its content)
+func (b *StringBuilder) FieldsBy(sep rune) (n int, fields [][]rune) {
 
-	var buf []byte
+	var buf []rune
 	counter := 0
 
 	for i := 0; i < len(b.Output); i++ {
+		if checkSepException(b.Output[i]) {
+			continue
+		}
 
 		// " " == 32
 		// "\t" == 9
+		// "\n" == 10
 		if b.Output[i] == sep {
 
 			if len(buf) == 0 {
 				continue
 			}
 			fields = append(fields, buf)
-			buf = []byte{}
+			buf = []rune{}
 			counter++
 			continue
 		}
-		buf = append(buf, byte(b.Output[i]))
+		buf = append(buf, b.Output[i])
 	}
 	if len(buf) > 0 {
 		fields = append(fields, buf)
@@ -351,19 +365,23 @@ func (b *StringBuilder) FieldsBy(sep rune) (n int, fields [][]byte) {
 
 // FieldsRows method will breakdown the content in the StringBuilder object
 // by the input runes provided, returning the number of rows and fields detected
-// and a slice of slice of byte arrays (for each row, and each field and its content)
-func (b *StringBuilder) FieldsRows(row, fld rune) (r, f int, rows [][][]byte) {
+// and a slice of slice of rune arrays (for each row, and each field and its content)
+func (b *StringBuilder) FieldsRows(row, fld rune) (r, f int, rows [][][]rune) {
 
-	var buf []byte
-	var fields [][]byte
+	var buf []rune
+	var fields [][]rune
 
 	for i := 0; i < len(b.Output); i++ {
+		if checkSepException(b.Output[i]) {
+			continue
+		}
+
 		if b.Output[i] == row {
 			if len(fields) == 0 {
 				continue
 			}
 			rows = append(rows, fields)
-			fields = [][]byte{}
+			fields = [][]rune{}
 			continue
 		}
 		// " " == 32
@@ -375,10 +393,10 @@ func (b *StringBuilder) FieldsRows(row, fld rune) (r, f int, rows [][][]byte) {
 				continue
 			}
 			fields = append(fields, buf)
-			buf = []byte{}
+			buf = []rune{}
 			continue
 		}
-		buf = append(buf, byte(b.Output[i]))
+		buf = append(buf, b.Output[i])
 	}
 
 	if len(buf) > 0 {
@@ -392,8 +410,16 @@ func (b *StringBuilder) FieldsRows(row, fld rune) (r, f int, rows [][][]byte) {
 	return len(rows), len(fields), rows
 }
 
-
 // String method returns the Output value of a StringBuilder object, as a string type
 func (b *StringBuilder) String() string {
 	return string(b.Output)
+}
+
+func checkSepException(input rune) bool {
+	for _, v := range defaultSepException {
+		if input == v {
+			return true
+		}
+	}
+	return false
 }
