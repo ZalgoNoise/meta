@@ -42,8 +42,8 @@ func DoubleDecimal(raw float64) float64 {
 // 2^16; or, n / 65536; or, n / (1 << 16)
 func ShiftLoads(raw [3]uint64) [3]float64 {
 	return [3]float64{
-		DoubleDecimal(float64(raw[0])/(1<<16)),
-		DoubleDecimal(float64(raw[1])/(1<<16)),
-		DoubleDecimal(float64(raw[2])/(1<<16)),
+		DoubleDecimal(float64(raw[0]) / (1 << 16)),
+		DoubleDecimal(float64(raw[1]) / (1 << 16)),
+		DoubleDecimal(float64(raw[2]) / (1 << 16)),
 	}
 }
