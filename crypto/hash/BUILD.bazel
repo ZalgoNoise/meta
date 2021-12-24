@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "hash",
+    srcs = ["sha256.go"],
+    importpath = "github.com/ZalgoNoise/meta/crypto/hash",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "hash_test",
+    srcs = ["sha256_test.go"],
+    embed = [":hash"],
+)
