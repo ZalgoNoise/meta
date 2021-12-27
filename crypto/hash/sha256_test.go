@@ -1,4 +1,4 @@
-package sha256
+package hash
 
 import (
 	"testing"
@@ -24,7 +24,7 @@ var expectedResults []string = []string{
 	"eb98b6704c17b6add5642ea05e12e5ad2d3c94c39b9950dacfb9bea8882b9a98",
 }
 
-func TestHash(t *testing.T) {
+func TestSHA256Hash(t *testing.T) {
 	type input struct {
 		seed       string
 		iterations int
@@ -73,14 +73,16 @@ func TestHash(t *testing.T) {
 		},
 	}
 
+	h := SHA256{}
+
 	for _, test := range tests {
 		var hash []byte
 
 		for i := 1; i <= test.input.iterations; i++ {
 			if i == 1 {
-				hash = Hash(test.input.seed)
+				hash = h.Hash(test.input.seed)
 			} else {
-				hash = Hash(hash)
+				hash = h.Hash(hash)
 			}
 		}
 
