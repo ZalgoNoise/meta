@@ -7,21 +7,21 @@ import (
 
 func Hash(input interface{}) []byte {
 	h := sha256.New()
-	
+
 	switch v := input.(type) {
-		case string:
-			h.Write([]byte(v))
-			return h.Sum(nil)
-			
-		case []byte:
-			oldHash := make([]byte, hex.EncodedLen(32))
-			hex.Encode(oldHash, v)
-			h.Write(oldHash)
+	case string:
+		h.Write([]byte(v))
 
-			return h.Sum(nil)
+	case []byte:
+		h.Write(v)
 
-		default:
-			return []byte{}
+	default:
+		return []byte{}
 	}
-	
+
+	hash := h.Sum(nil)
+	hexHash := make([]byte, hex.EncodedLen(32))
+	hex.Encode(hexHash, hash)
+	return hexHash
+
 }

@@ -12,3 +12,9 @@ go_test(
     srcs = ["charmatcher_test.go"],
     embed = [":charmatcher"],
 )
+
+go_test(
+    name = "lib_test",
+    srcs = ["charmatcher_test.go"],
+    embed = [":charmatcher"],
+)

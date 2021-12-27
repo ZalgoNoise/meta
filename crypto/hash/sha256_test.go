@@ -1,7 +1,6 @@
 package sha256
 
 import (
-	"encoding/hex"
 	"testing"
 )
 
@@ -27,47 +26,47 @@ var expectedResults []string = []string{
 
 func TestHash(t *testing.T) {
 	type input struct {
-		seed string
+		seed       string
 		iterations int
 	}
 
 	tests := []struct {
 		input input
-		ok string
+		ok    string
 	}{
 		{
 			input: input{
-				seed: inputStrings[0],
+				seed:       inputStrings[0],
 				iterations: inputIterations[0],
 			},
 			ok: expectedResults[0],
-		},{
+		}, {
 			input: input{
-				seed: inputStrings[0],
+				seed:       inputStrings[0],
 				iterations: inputIterations[1],
 			},
 			ok: expectedResults[1],
-		},{
+		}, {
 			input: input{
-				seed: inputStrings[0],
+				seed:       inputStrings[0],
 				iterations: inputIterations[2],
 			},
 			ok: expectedResults[2],
-		},{
+		}, {
 			input: input{
-				seed: inputStrings[1],
+				seed:       inputStrings[1],
 				iterations: inputIterations[0],
 			},
 			ok: expectedResults[3],
-		},{
+		}, {
 			input: input{
-				seed: inputStrings[1],
+				seed:       inputStrings[1],
 				iterations: inputIterations[1],
 			},
 			ok: expectedResults[4],
-		},{
+		}, {
 			input: input{
-				seed: inputStrings[1],
+				seed:       inputStrings[1],
 				iterations: inputIterations[2],
 			},
 			ok: expectedResults[5],
@@ -77,23 +76,23 @@ func TestHash(t *testing.T) {
 	for _, test := range tests {
 		var hash []byte
 
-		for i := 1 ; i <= test.input.iterations ; i++ {
+		for i := 1; i <= test.input.iterations; i++ {
 			if i == 1 {
 				hash = Hash(test.input.seed)
 			} else {
 				hash = Hash(hash)
-			}	
+			}
 		}
-		
-		result := hex.EncodeToString(hash)
+
+		result := string(hash)
 
 		if test.ok != result {
 			t.Errorf(`[sha256] Hash(%s) x %v = %s ; expected %s`,
-			test.input.seed,
-			test.input.iterations,
-			result,
-			test.ok,
-		)
+				test.input.seed,
+				test.input.iterations,
+				result,
+				test.ok,
+			)
 		}
 	}
 }

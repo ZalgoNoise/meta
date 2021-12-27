@@ -13,3 +13,9 @@ go_test(
     srcs = ["strbuilder_test.go"],
     embed = [":strbuilder"],
 )
+
+go_test(
+    name = "lib_test",
+    srcs = ["strbuilder_test.go"],
+    embed = [":strbuilder"],
+)
