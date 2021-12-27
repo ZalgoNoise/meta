@@ -11,21 +11,10 @@ type SHA256 struct{}
 
 // Hash method satisfies the Hasher interface. It's a
 // recursive hashing function to allow continuous hashing
-func (hasher SHA256) Hash(input interface{}) []byte {
+func (hasher SHA256) Hash(data []byte) []byte {
 
 	var hash []byte = make([]byte, hex.EncodedLen(32))
-	var sum [32]byte
-
-	switch v := input.(type) {
-	case string:
-		sum = sha256.Sum256([]byte(v))
-
-	case []byte:
-		sum = sha256.Sum256(v)
-
-	default:
-		return []byte{}
-	}
+	var sum [32]byte = sha256.Sum256(data)
 
 	hex.Encode(hash, sum[:])
 

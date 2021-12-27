@@ -4,5 +4,5 @@ package hash
 // which takes in an empty interface (to support multiple formats)
 // and returns a slice of bytes (the hashed seed)
 type Hasher interface {
-	Hash(interface{}) []byte
+	Hash(data []byte) []byte
 }

@@ -80,7 +80,7 @@ func TestSHA256Hash(t *testing.T) {
 
 		for i := 1; i <= test.input.iterations; i++ {
 			if i == 1 {
-				hash = h.Hash(test.input.seed)
+				hash = h.Hash([]byte(test.input.seed))
 			} else {
 				hash = h.Hash(hash)
 			}
@@ -89,7 +89,7 @@ func TestSHA256Hash(t *testing.T) {
 		result := string(hash)
 
 		if test.ok != result {
-			t.Errorf(`[sha256] Hash(%s) x %v = %s ; expected %s`,
+			t.Errorf(`[sha256] Hash([]byte(%s)) x %v = %s ; expected %s`,
 				test.input.seed,
 				test.input.iterations,
 				result,
