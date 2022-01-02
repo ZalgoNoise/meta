@@ -15,7 +15,7 @@ var inputIterations []int = []int{
 	10,
 }
 
-var expectedResults []string = []string{
+var expectedResultsSHA256 []string = []string{
 	"7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
 	"4163fb4ab9e1e0a51709a51bc7e13ab6792907905960145c722d2c1479caac42",
 	"1fada6a9b8084eff6347baeae0812aac1c14fcc0a97759a6bfa2d8a2ea087705",
@@ -39,37 +39,37 @@ func TestSHA256Hash(t *testing.T) {
 				seed:       inputStrings[0],
 				iterations: inputIterations[0],
 			},
-			ok: expectedResults[0],
+			ok: expectedResultsSHA256[0],
 		}, {
 			input: input{
 				seed:       inputStrings[0],
 				iterations: inputIterations[1],
 			},
-			ok: expectedResults[1],
+			ok: expectedResultsSHA256[1],
 		}, {
 			input: input{
 				seed:       inputStrings[0],
 				iterations: inputIterations[2],
 			},
-			ok: expectedResults[2],
+			ok: expectedResultsSHA256[2],
 		}, {
 			input: input{
 				seed:       inputStrings[1],
 				iterations: inputIterations[0],
 			},
-			ok: expectedResults[3],
+			ok: expectedResultsSHA256[3],
 		}, {
 			input: input{
 				seed:       inputStrings[1],
 				iterations: inputIterations[1],
 			},
-			ok: expectedResults[4],
+			ok: expectedResultsSHA256[4],
 		}, {
 			input: input{
 				seed:       inputStrings[1],
 				iterations: inputIterations[2],
 			},
-			ok: expectedResults[5],
+			ok: expectedResultsSHA256[5],
 		},
 	}
 
