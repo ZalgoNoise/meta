@@ -4,6 +4,7 @@ go_library(
     name = "hash",
     srcs = [
         "hash.go",
+        "md5.go",
         "sha1.go",
         "sha256.go",
         "sha512.go",
