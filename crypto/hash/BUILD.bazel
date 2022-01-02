@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "hash.go",
         "sha256.go",
+        "sha512.go",
     ],
     importpath = "github.com/ZalgoNoise/meta/crypto/hash",
     visibility = ["//visibility:public"],
