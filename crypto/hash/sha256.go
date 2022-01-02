@@ -21,3 +21,20 @@ func (hasher SHA256) Hash(data []byte) []byte {
 	return hash
 
 }
+
+// SHA224 struct is a general placeholder for the SHA224
+// algorithm, to implement the Hasher interface
+type SHA224 struct{}
+
+// Hash method satisfies the Hasher interface. It's a
+// recursive hashing function to allow continuous hashing
+func (hasher SHA224) Hash(data []byte) []byte {
+
+	var hash []byte = make([]byte, hex.EncodedLen(28))
+	var sum [28]byte = sha256.Sum224(data)
+
+	hex.Encode(hash, sum[:])
+
+	return hash
+
+}
