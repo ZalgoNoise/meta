@@ -4,6 +4,7 @@ go_library(
     name = "hash",
     srcs = [
         "hash.go",
+        "hash_mockdata.go",
         "md5.go",
         "sha1.go",
         "sha256.go",
@@ -15,6 +16,11 @@ go_library(
 
 go_test(
     name = "hash_test",
-    srcs = ["sha256_test.go"],
+    srcs = [
+        "md5_test.go",
+        "sha1_test.go",
+        "sha256_test.go",
+        "sha512_test.go",
+    ],
     embed = [":hash"],
 )
